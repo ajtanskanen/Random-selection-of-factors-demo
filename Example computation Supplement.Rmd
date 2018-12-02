@@ -1,0 +1,38 @@
+---
+title: "Computational demonstration in R"
+output:
+  pdf_document: default
+  html_document:
+    df_print: paged
+    pandoc_args: [
+      "--number-sections",
+    ]
+---
+
+In the main article, we consider random vectors in $R^d$ whose components are taken independently from a common distribution with a zero mean and a variance $1/d$. Here we present an R code, courtesy of the anynymous reviewer, that demonstrates that $d$-dimensional random vectors from distribution $N(0,1/\sqrt{d})$ have unit length on average, and that their covariance is close to zero.
+
+```{r}
+d <- 3
+N <- 100000
+meandistsq1 <- 0
+meandistsq2 <- 0
+cov <- 0
+
+for (i in 1:N)
+{
+  r1 <- rnorm(d, mean=0, sd=1/sqrt(d))
+  r2 <- rnorm(d, mean=0, sd=1/sqrt(d))
+  distsq1 <- sum(r1^2)
+  meandistsq1 <- meandistsq1 + distsq1/N
+  distsq2 <- sum(r2^2)
+  meandistsq2 <- meandistsq2 + distsq2/N
+  cov <- cov + sum(r1*r2)/N
+}
+
+meandistsq1
+meandistsq2
+cov
+```
+
+
+To check that both values are reached with a high probability needs some assumptions about the tail behavior of the common distribution. More details about such estimates can be found in the Supporting Information S1.
